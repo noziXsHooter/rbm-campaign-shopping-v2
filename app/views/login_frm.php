@@ -25,21 +25,21 @@
                                 <button type="submit" class="btn btn-primary-bg btn-secondary px-4">Entrar<i class="fa-solid fa-right-to-bracket ms-2"></i></button>
                             </div>
 
-                            <div class="mb-3 text-center">
-                                <a class="text-info" href="?ct=main&mt=register_frm">Registrar</a>
-                            </div>
-<!--                             <div class="mb-3 text-center">
+                        <!-- <div class="mb-3 text-center">
                                 <a class="text-info" href="#">Esqueci minha da senha!</a>
                             </div> -->
-
-                            <?php if(!empty($validation_errors)): ?> 
-                                <div class="alert alert-danger p-2 text-center">
-                                    <?php foreach($validation_errors as $error): ?>
-                                        <div><?= $error ?></div>
-                                    <?php endforeach; ?>
-                                </div>
-                            <?php endif; ?>
+                            
                         </form>
+                        <div class="mb-3 text-center">
+                            <a class="text-info" href="?ct=main&mt=register_frm">Registrar</a>
+                        </div>
+                        <?php if(!empty($validation_errors)): ?> 
+                            <div class="alert alert-danger p-2 text-center">
+                                <?php foreach($validation_errors as $error): ?>
+                                    <div><?= $error ?></div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
                 

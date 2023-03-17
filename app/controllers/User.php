@@ -27,11 +27,34 @@ class User extends BaseController
         $traitViews = new TraitViews();
         $traitViews->trait_views('list_clients', $data);
 
-/*         $this->view('layouts/html_header');
+    /*  $this->view('layouts/html_header');
         $this->view('navbar', $data);
         $this->view('list_clients', $data);
         $this->view('footer');
-        $this->view('layouts/html_footer'); */
+        $this->view('layouts/html_footer');
+    */
+    }
+
+    public function export_csv()
+    {
+    
+        if(!check_Session()){
+            header('Location: index.php');
+        }
+
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+            $this->list_clients();
+            return;
+        }   
+
+        $json_data = $_POST['data'];
+        // Decoda o JSON DE VOLTA PRA ARRAY
+        $data = json_decode($json_data, true);
+
+        //EXPORTA DADOS EM CSV
+        export_csv($data, array('ID','Nome', 'Gênero', 'Nascimento'), 'clientes');
+
+        $this->list_clients();
 
     }
 

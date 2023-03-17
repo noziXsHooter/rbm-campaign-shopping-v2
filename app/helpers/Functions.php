@@ -287,3 +287,133 @@ class TraitViews extends BaseController
         }
         
     }
+
+    // EXPORTA UM ARRAY
+    function export_csv($dataArray, $headersArray, $fileName)
+    {
+
+        $values = array_map('array_values', $dataArray);
+
+        // adiciona o array de valores em um novo array com a primeira linha (headers)
+        $data = array_merge(array($headersArray), $values);
+        
+        $dateNow = str_replace(" ", "_", date("Y-m-d h:i:s"));
+
+        // Cabeçalho do arquivo CSV
+        $header = array(
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename='. $fileName . '-' . $dateNow . '.csv'
+        );
+
+        // Cria o arquivo CSV
+        $csv = fopen('php://temp/maxmemory:'. (5*1024*1024), 'r+');
+
+        // Escreve os dados no arquivo CSV
+        foreach ($data as $row) {
+            fputcsv($csv, $row);
+        }
+
+        // Volta o ponteiro para o início do arquivo CSV
+        rewind($csv);
+
+        // Lê o conteúdo do arquivo CSV
+        $csv_data = stream_get_contents($csv);
+
+        // Fecha o arquivo CSV
+        fclose($csv);
+
+        // Envia os headers para o navegador
+        foreach ($header as $key => $value) {
+            header("$key: $value");
+        }
+
+        // Envia o conteúdo do arquivo CSV para o navegador
+        echo $csv_data;
+        exit;
+
+    }
+
+    //
+    function export_ofx($data)
+    {
+
+           // Example array
+           $transactions = $data;
+        
+           // Build the OFX file contents
+           $ofx = <<<OFX
+           OFXHEADER:100
+           DATA:OFXSGML
+           VERSION:102
+           SECURITY:NONE
+           ENCODING:USASCII
+           CHARSET:1252
+           COMPRESSION:NONE
+           OLDFILEUID:NONE
+           NEWFILEUID:NONE
+           
+           <OFX>
+             <SIGNONMSGSRSV1>
+               <SONRS>
+                 <STATUS>
+                   <CODE>0</CODE>
+                   <SEVERITY>INFO</SEVERITY>
+                   <MESSAGE>Successful Sign On</MESSAGE>
+                 </STATUS>
+                 <DTSERVER>20220316000000</DTSERVER>
+                 <LANGUAGE>ENG</LANGUAGE>
+               </SONRS>
+             </SIGNONMSGSRSV1>
+             <BANKMSGSRSV1>
+               <STMTTRNRS>
+                 <TRNUID>1234567890</TRNUID>
+                 <STATUS>
+                   <CODE>0</CODE>
+                   <SEVERITY>INFO</SEVERITY>
+                   <MESSAGE>Successful Request</MESSAGE>
+                 </STATUS>
+                 <STMTRS>
+                   <CURDEF>USD</CURDEF>
+                   <BANKACCTFROM>
+                     <BANKID>12345678</BANKID>
+                     <ACCTID>12345678901234</ACCTID>
+                     <ACCTTYPE>CHECKING</ACCTTYPE>
+                   </BANKACCTFROM>
+                   <BANKTRANLIST>
+                     <DTSTART>20220101000000</DTSTART>
+                     <DTEND>20220228000000</DTEND>
+                     <STMTTRN>
+           OFX;
+           
+           foreach ($transactions as $transaction) {
+               $date = date('Ymd', strtotime($transaction['date']));
+               $amount = number_format($transaction['amount'], 2, '.', '');
+               $description = htmlentities($transaction['description'], ENT_QUOTES, 'UTF-8');
+               $ofx .= <<<OFX
+                       <TRNTYPE>OTHER</TRNTYPE>
+                       <DTPOSTED>{$date}000000</DTPOSTED>
+                       <TRNAMT>{$amount}</TRNAMT>
+                       <FITID>1234567890</FITID>
+                       <NAME>{$description}</NAME>
+                       <MEMO>{$description}</MEMO>
+                     </STMTTRN>
+           OFX;
+           }
+           
+           $ofx .= <<<OFX
+                   </BANKTRANLIST>
+                 </STMTRS>
+               </STMTTRNRS>
+             </BANKMSGSRSV1>
+           </OFX>
+           OFX;
+           
+           // Set the headers to force the download
+           header('Content-Type: application/force-download');
+           header('Content-Disposition: attachment; filename="transactions.ofx"');
+           header('Content-Length: ' . strlen($ofx));
+           
+           // Output the file contents to the browser
+           echo $ofx;
+           exit();
+    }

@@ -14,11 +14,11 @@ class LuckNumbers extends BaseModel
             $this->db_connect();
             $result = $this->query("SELECT " .
             "u.id, " . 
-            "n.hash, " . 
             "n.user_id, " .
-            "n.created_at, " .
             "u.name, " . 
-            "u.sex " . 
+            "n.hash, " . 
+            "u.sex, " . 
+            "n.created_at " .
             "FROM luck_numbers AS n " .
             "INNER JOIN users AS u " .
             "ON n.user_id = u.id " .
@@ -40,12 +40,12 @@ class LuckNumbers extends BaseModel
             
             $this->db_connect();
             $result = $this->query("SELECT " .
-            "n.user_id, " . 
-            "n.hash, " .
-            "n.created_at, " .
             "u.id, " . 
+            "n.user_id, " . 
             "u.name, " . 
-            "u.sex " . 
+            "n.hash, " .
+            "u.sex, " . 
+            "n.created_at " .
             "FROM luck_numbers AS n " .
             "INNER JOIN users AS u " .
             "ON n.user_id = :user_id " .

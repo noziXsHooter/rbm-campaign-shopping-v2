@@ -48,21 +48,34 @@
                         <div class="alert alert-success p-2 my-2 text-center">
                             <h2 class="btn btn-success w-25">Vencedor!</h2>
                                 <?php foreach($sweepstake_winner as $sweepstake): ?>
-                            <div><?= $sweepstake ?></div>
-                        <?php endforeach; ?>
-                    </div>   
-                    <?php endif;?>    
-                </div>
-                    </div>
-                </div>
-               
-                <!-- Sorteios Realizados -->
-            <div class="col-12 p-3 bg-white">
-
-                    <div class="row">
-                        <div class="col">
-                            <h5><i class="fa-solid fa-user-tie me-2"></i><strong>Sorteios realizados: </strong></h5>
+                                    <div><?= $sweepstake ?></div>
+                                    <?php endforeach; ?>
+                                </div>   
+                                <?php endif;?>    
+                            </div>
                         </div>
+                    </div>
+                    
+                    <!-- Sorteios Realizados -->
+                    <div class="col-12 p-3 bg-white">
+                        
+                        <div class="row">
+                            <div class="col">
+                                <h5><i class="fa-solid fa-user-tie me-2"></i><strong>Sorteios realizados: </strong></h5>
+                            </div>
+
+                           <!--  Encoda o array para JSON e guarda no campo input   -->
+                            <?php $json_data = json_encode($sweepstakes_data, JSON_UNESCAPED_UNICODE); ?>
+                            
+                           <!--  Envia os dados por esse form/button -->
+                            <form action="?ct=sweepstake&mt=export_csv&id=sweepstakes" method="post">
+                                <div class="col text-end">
+                                    <input type="hidden" name="data" value="<?php echo htmlentities($json_data); ?>">
+                                    <button type="submit" name="export_csv" class="btn btn-secondary">
+                                        <i class="fa-regular fa-file-excel me-2"></i>Exportar para CSV
+                                    </button>
+                                </div>
+                            </form>
                     <!--                 <div class="col text-end">
                             <a href="#" class="btn btn-secondary"><i class="fa-solid fa-upload me-2"></i></i>Carregar ficheiro</a>
                             <a href="?ct=agent&mt=new_client_frm" class="btn btn-secondary"><i class="fa-solid fa-plus me-2"></i>Novo cliente</a>
@@ -103,11 +116,6 @@
                             <div class="col">
                                 <p class="mb-5">Total: <strong><?=count($sweepstakes_data)?></strong></p>
                             </div>
-                    <!--                     <div class="col text-end">
-                                <a href="#" class="btn btn-secondary">
-                                    <i class="fa-regular fa-file-excel me-2"></i>Exportar para XLSX
-                                </a>
-                            </div> -->
                         </div>
                     <?php endif; ?>
                     </div>

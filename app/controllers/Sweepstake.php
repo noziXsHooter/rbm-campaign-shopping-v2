@@ -8,9 +8,9 @@ use scMVC\Models\Sweepstakes;
 
 class Sweepstake extends BaseController
 {
-        //
-        public function index()
-        {
+    //
+    public function index()
+    {
 
         if(!check_Session()){
             header('Location: index.php');
@@ -197,4 +197,29 @@ class Sweepstake extends BaseController
         $this->view('layouts/html_footer');
     }
 
+    //
+    public function export_csv($id)
+    {
+    
+        if(!check_Session()){
+            header('Location: index.php');
+        }
+
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+            $this->index();
+            return;
+        }   
+
+        $json_data = $_POST['data'];
+        // Decoda o JSON DE VOLTA PRA ARRAY
+        $data = json_decode($json_data, true);
+
+        // CHAMA A FUNÇÂO PRA CONVERTER O ARRAY EM CSV E FAZ O DOWNLOAD
+         export_csv($data, array('Nome', 'Número da Sorte', 'Data da Criação'), 'sorteio-realizados');
+
+        $this->index();
+
+    }
+
+    
 }

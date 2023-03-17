@@ -20,7 +20,7 @@ class Coupon extends BaseController
         $results = $model->get_my_coupons($user_id);
 
         $data['user'] = $_SESSION['user'];
-        $data['clients'] = $results['data'];
+        $data['my_coupons'] = $results['data'];
 
         $this->view('layouts/html_header');
         $this->view('navbar', $data);
@@ -117,7 +117,7 @@ class Coupon extends BaseController
         $results = $model->get_active_coupons();
 
         $data['user'] = $_SESSION['user'];
-        $data['clients'] = $results['data'];
+        $data['active_coupons'] = $results['data'];
 
         $this->view('layouts/html_header');
         $this->view('navbar', $data);
@@ -145,6 +145,38 @@ class Coupon extends BaseController
         $this->view('list_client_coupons', $data);
         $this->view('footer');
         $this->view('layouts/html_footer');
+
+    }
+
+    public function export_csv($id=null)
+    {
+    
+        if(!check_Session()){
+            header('Location: index.php');
+        }
+
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+            $this->my_coupons();
+            return;
+        }   
+
+        $json_data = $_POST['data'];
+        // Decoda o JSON DE VOLTA PRA ARRAY
+        $data = json_decode($json_data, true);
+
+        switch ($id) {
+            case 'my_coupons':
+                // CHAMA A FUNÇÂO PRA CONVERTER O ARRAY EM CSV E FAZ O DOWNLOAD
+                export_csv($data, array('Código', 'Valor', 'Loja', 'Data da Criação', 'Status'), 'meus-cupons');
+                $this->my_coupons();
+                break;
+            case 'active_coupons':
+                export_csv($data, array('Código', 'Valor', 'Loja', 'Data da Criação', 'Status'), 'cupons_ativos');
+                $this->list_active_coupons();
+                break;        
+            default:
+                break;
+        }
 
     }
     
