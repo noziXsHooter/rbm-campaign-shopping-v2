@@ -8,7 +8,7 @@ use TraitViews;
 
 class User extends BaseController
 {
-
+    // Lista todos os clientes
     public function list_clients(){
 
         if(!check_Session() || $_SESSION['user']->profile != 'admin'){
@@ -23,7 +23,7 @@ class User extends BaseController
         $data['clients'] = $results['data'];
 
 
-        //FUNÇÃO DE TESTE PARA RETORNO DAS VIEWS
+        //Função de teste para retorno das views
         $traitViews = new TraitViews();
         $traitViews->trait_views('list_clients', $data);
 
@@ -34,7 +34,12 @@ class User extends BaseController
         $this->view('layouts/html_footer');
     */
     }
-
+    
+    /**
+     * Export csv file
+     *
+     * @return void
+     */
     public function export_csv()
     {
     
@@ -48,14 +53,13 @@ class User extends BaseController
         }   
 
         $json_data = $_POST['data'];
-        // Decoda o JSON DE VOLTA PRA ARRAY
+        // Decoda o json de volta em array
         $data = json_decode($json_data, true);
 
-        //EXPORTA DADOS EM CSV
+        // Chama a função pra converter o array em csv e faz o download
         export_csv($data, array('ID','Nome', 'Gênero', 'Nascimento'), 'clientes');
 
         $this->list_clients();
-
     }
 
 }

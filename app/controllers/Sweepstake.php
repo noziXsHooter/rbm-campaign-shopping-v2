@@ -8,7 +8,7 @@ use scMVC\Models\Sweepstakes;
 
 class Sweepstake extends BaseController
 {
-    //
+    //Página de retorno (Página principal do sorteio)
     public function index()
     {
 
@@ -36,7 +36,7 @@ class Sweepstake extends BaseController
 
     }
 
-    //
+    //View de sorteio do cliente
     public function clients_index()
     {
     
@@ -65,9 +65,15 @@ class Sweepstake extends BaseController
         $this->view('layouts/html_footer');
     
     }
-
-    //LIDA COM AS AÇÕES DOS BOTÕES DE SORTEIO
-    public function sweepstake_handlers($id= null){
+  
+    /**
+     * Lida com as ações dos botões de sorteio
+     *
+     * @param  string $id
+     * @return void
+     */
+    public function sweepstake_handlers(string $id= null)
+    {
 
         if(!check_Session() || $_SESSION['user']->profile != 'admin' ){
             header('Location: index.php');
@@ -82,10 +88,9 @@ class Sweepstake extends BaseController
         $data['sweepstake_message'] = [];
 
         switch ($id) {
-            //REALIZA O SORTEIO TEÓRICO
-            case 'raffle':
 
-                /* printData($data['sweepstake_status']); */
+            case 'raffle': //REALIZA O SORTEIO TEÓRICO
+
                 if(!$data['sweepstake_status']){
                     $resultRaffle = raffle();
 
@@ -102,7 +107,7 @@ class Sweepstake extends BaseController
 
                     $data['sweepstake_winner'][] = $resultRaffle['message'] ? $resultRaffle['message'] : '';
 
-                    //SALVA NO LOG
+                    //Salva no log
                     logger("Um sorteio teórico acaba de ser realizado. Dados do ganhador: " . $data['sweepstake_winner'][0], 'info');
 
                     $this->view('layouts/html_header');
@@ -127,16 +132,16 @@ class Sweepstake extends BaseController
 
                 break;
 
-            //FINALIZA O SORTEIO - LIMPA OS NUMEROS DA SORTE MUDA O STATUS DO SORTEIO  
-            case 'announce_sweepstake_winner':
+
+            case 'announce_sweepstake_winner':  //Finaliza o sorteio - limpa os números da sorte e muda o status do sorteio 
 
                 $winnerNumber = $_SESSION['winnerNumber'];
-                $resultWinnerData =  $model->search_for_hash_owner($winnerNumber);
+                $resultWinnerData =  $model->search_for_hash_owner($winnerNumber); //Procura pelo cliente dono do número da sorte
 
                 if(!$resultWinnerData->results){
 
                     $data['sweepstake_message'] = ['status'=> false, 'message' => 'Não há números a serem sorteados!'];
-                     //SALVA NO LOG
+                     //Salva no log
                      logger("Houve uma tentativa de sorteio sem números da sorte. ", 'notice');
 
                     $this->view('layouts/html_header');
@@ -155,8 +160,8 @@ class Sweepstake extends BaseController
 
                 if(!empty($resultWinnerData->results[0])){
 
-                    $resultInsert = $model->insert_sweepstake_to_database($sweepstakeParams);
-                    $resultWinner = announce_sweepstake_winner();
+                    $resultInsert = $model->insert_sweepstake_to_database($sweepstakeParams); //Insere sorteio no banco
+                    $resultWinner = announce_sweepstake_winner(); // Anuncia ganhador do sorteio
                 }
 
                 $data['sweepstake_message'] = $resultWinner;
@@ -169,8 +174,8 @@ class Sweepstake extends BaseController
                 $this->view('layouts/html_footer');
                 break;
 
-            //REABILITA PARA NOVO SORTEIO
-            case 'enableSweepstake':
+
+            case 'enableSweepstake':   //Reabilita para novo sorteio
                 
                 $resultEnable = enable_sweepstake();
                 $data['sweepstake_status'] = $sweepstakeStatus['data'][0]->status; //Pega o status do Sorteio
@@ -197,8 +202,13 @@ class Sweepstake extends BaseController
         $this->view('layouts/html_footer');
     }
 
-    //
-    public function export_csv($id)
+    
+    /**
+     * Export csv file
+     *
+     * @return void
+     */
+    public function export_csv()
     {
     
         if(!check_Session()){
@@ -211,10 +221,10 @@ class Sweepstake extends BaseController
         }   
 
         $json_data = $_POST['data'];
-        // Decoda o JSON DE VOLTA PRA ARRAY
+        // Decoda o json de volta em array
         $data = json_decode($json_data, true);
 
-        // CHAMA A FUNÇÂO PRA CONVERTER O ARRAY EM CSV E FAZ O DOWNLOAD
+        // Chama a função pra converter o array em csv e faz o download
          export_csv($data, array('Nome', 'Número da Sorte', 'Data da Criação'), 'sorteio-realizados');
 
         $this->index();

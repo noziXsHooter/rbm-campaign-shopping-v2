@@ -62,3 +62,4 @@
 [2023-03-16T20:00:10.054614-03:00] app_logs.INFO: O usuário de id: 1 acaba de cadastrar o cupom: 50 [] []
 [2023-03-16T20:50:22.778506-03:00] app_logs.INFO: O usuário de id: 1 acaba de cadastrar o cupom: 55 [] []
 [2023-03-16T20:50:38.147219-03:00] app_logs.INFO: O usuário de id: 1 acaba de cadastrar o cupom: 60 [] []
+[2023-03-18T00:43:27.700098-03:00] app_logs.INFO: 11111111111 - logou com successo [] []

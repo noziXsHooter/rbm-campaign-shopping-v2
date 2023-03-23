@@ -8,7 +8,7 @@ use scMVC\Models\Coupons;
 
 class Coupon extends BaseController
 {
-    //
+    // View lista meus cupons
     public function my_coupons(){
 
         if(!check_Session()){
@@ -29,7 +29,7 @@ class Coupon extends BaseController
         $this->view('layouts/html_footer');
     }
 
-    //
+    // View do formulário de cadastro dos cupons
     public function coupons_add_new_frm(){
 
         if(!check_Session()){
@@ -45,7 +45,7 @@ class Coupon extends BaseController
         $this->view('layouts/html_footer');
     }
 
-    //
+    // Envio do cupon para cadastro com validação
     public function new_coupon_submit() {
 
         if(!check_Session() || $_SERVER['REQUEST_METHOD'] != 'POST'){
@@ -105,7 +105,7 @@ class Coupon extends BaseController
         }
     }
 
-    ///
+    //View de cupons ativos (Todos os cupons ativos)
     public function list_active_coupons(){
 
         if(!check_Session()){
@@ -126,9 +126,15 @@ class Coupon extends BaseController
         $this->view('layouts/html_footer');
 
     }
-
-    //
-    public function client_coupons($id){
+ 
+    /**
+     * View de cupons do cliente selecionado
+     *
+     * @param  int $id
+     * @return void
+     */
+    public function client_coupons(int $id)
+    {
 
         if(!check_Session()){
             header('Location: index.php');
@@ -147,8 +153,14 @@ class Coupon extends BaseController
         $this->view('layouts/html_footer');
 
     }
-
-    public function export_csv($id=null)
+    
+    /**
+     * Export csv file
+     *
+     * @param  string $id
+     * @return void
+     */
+    public function export_csv(string $id=null)
     {
     
         if(!check_Session()){
@@ -161,12 +173,12 @@ class Coupon extends BaseController
         }   
 
         $json_data = $_POST['data'];
-        // Decoda o JSON DE VOLTA PRA ARRAY
+        // Decoda o json de volta para array
         $data = json_decode($json_data, true);
 
         switch ($id) {
             case 'my_coupons':
-                // CHAMA A FUNÇÂO PRA CONVERTER O ARRAY EM CSV E FAZ O DOWNLOAD
+                // Chama a função pra converter o array em csv e faz o download
                 export_csv($data, array('Código', 'Valor', 'Loja', 'Data da Criação', 'Status'), 'meus-cupons');
                 $this->my_coupons();
                 break;

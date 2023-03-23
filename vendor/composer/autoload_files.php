@@ -8,4 +8,5 @@ $baseDir = dirname($vendorDir);
 return array(
     'd7cfae2bf457008a61fda2626a2df19e' => $baseDir . '/app/config.php',
     'fe64a0622628bda04e4bdb38bda05577' => $baseDir . '/app/helpers/functions.php',
+    '6c9da7c7f1e47b5ac1850fa4dea807bc' => $baseDir . '/app/system/RouterTest.php',
 );

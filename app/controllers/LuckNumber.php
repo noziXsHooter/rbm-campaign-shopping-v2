@@ -8,8 +8,9 @@ use scMVC\Models\LuckNumbers;
 
 class LuckNumber extends BaseController
 {
-    //
-    public function luck_numbers(){
+    //View com todos os números da sorte
+    public function luck_numbers()
+    {
         /* printData("luck numbers"); */
         if(!check_Session()){
             header('Location: index.php');
@@ -30,7 +31,7 @@ class LuckNumber extends BaseController
 
     }
 
-    //
+    //View com os números da sorte do usuário
     public function client_luck_numbers()
     {
         if(!check_Session()){
@@ -51,8 +52,16 @@ class LuckNumber extends BaseController
         $this->view('layouts/html_footer');
     
     }
-    //
-    public function export_csv($id=null)
+
+
+    
+    /**
+     * Export csv file
+     *
+     * @param  string $id
+     * @return void
+     */
+    public function export_csv(string $id=null)
     {
     
         if(!check_Session()){
@@ -65,19 +74,19 @@ class LuckNumber extends BaseController
         }   
 
         $json_data = $_POST['data'];
-        // Decoda o JSON DE VOLTA PRA ARRAY
+        // Decoda o json de volta em array
         $data = json_decode($json_data, true);
 
         switch ($id) {
             case 'luck_numbers':
 
-                //
+                //Elimina os campos id e user_id antes de criar o arquivo csv
                 $data = array_map(function($subarray) {
                     unset($subarray['id'], $subarray['user_id']);
                     return $subarray;
                 }, $data);
 
-                // CHAMA A FUNÇÂO PRA CONVERTER O ARRAY EM CSV E FAZ O DOWNLOAD
+                // Chama a função pra converter o array em csv e faz o download
                 export_csv($data, array('Nome', 'Número da Sorte', 'Gênero', 'Data da Criação'), 'todos-nums-da-sorte');
                 $this->luck_numbers();
                 break;

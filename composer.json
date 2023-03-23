@@ -1,5 +1,5 @@
 {
-    "name": "nozix/cs-mvc",
+    "name": "nozix/sc-mvc",
     "description": "Shopping Campaign (SORTEIO DE CUPONS) - Trabalho-Projeto de curso da RBM WEB em MVC",
     "type": "project",
     "authors": [
@@ -18,7 +18,8 @@
         },
         "files":[
             "app/config.php",
-            "app/helpers/functions.php"
+            "app/helpers/functions.php",
+            "app/system/RouterTest.php"
         ]
     }
 }
