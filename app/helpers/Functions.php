@@ -18,10 +18,10 @@ date_default_timezone_set('America/Sao_Paulo');
 //--------------------       LOGS        --------------------------
 //-----------------------------------------------------------------
 
-    function logger ($message = '', $level = 'info')
+    function logger (string $message = '', string $level = 'info')
     {
 
-        // create a log channel
+        // Instancia de criação de logs do Monolog
         $log = new Logger('app_logs');
         $log->pushHandler(new StreamHandler(LOGS_PATH));
 
@@ -42,10 +42,10 @@ date_default_timezone_set('America/Sao_Paulo');
 //--------------------      CUPONS       --------------------------
 //-----------------------------------------------------------------
 
-    function coupon_form_validation($params)
+    function coupon_form_validation(array $params):array
     {
 
-        $resultFieldValidation = fields_validation($params);
+        $resultFieldValidation = fields_validation($params); //Valida os campos do formulário de cupom
 
         if(!$resultFieldValidation['status']){
 
@@ -62,10 +62,10 @@ date_default_timezone_set('America/Sao_Paulo');
         ];
 
         $model = new Coupons();
-        return $model->coupon_and_cpf_validation($validationParams);
+        return $model->coupon_and_cpf_validation($validationParams); //Valida cupon e Cpf no banco
     }
 
-    function fields_validation($params)
+    function fields_validation(array $params):array
     {
         $validation_errors = [];
         foreach($params as $fieldKey => $fieldValue){
@@ -107,7 +107,6 @@ date_default_timezone_set('America/Sao_Paulo');
             }
         }
 
-        /*  printData($validation_errors); */
         if(!empty($validation_errors)){
             return [
                 'status' => false,
@@ -125,21 +124,22 @@ date_default_timezone_set('America/Sao_Paulo');
 //--------------------        SORTEIO        ----------------------
 //-----------------------------------------------------------------
 
-    //REALIZA O SORTEIO (SORTEIO TEÓRICO - PODE SER REALIZADO UM NOVO SORTEIO SEM DETRIMENTO DOS COUPONS E DOS NUMEROS DA SORTE)
-    function raffle()
+    // Realiza o sorteio (Sorteio Teórico - Pode ser realizado um novo sorteio sem detrimentos dos cupon e dos números da sorte)
+    function raffle():array
     {
         $model = new Sweepstakes();
-        $result = $model->get_all_hashs();
+        $result = $model->get_all_hashs(); //Pega todos os cupons
 
+        // Verifica se há cupons
         if($result->affected_rows <= 1){
             return [
                 'status' => false,
                 'message' => 'Não há números a serem sorteados!'
             ];
         }
-
+        // Se há cupons entra
         if(!empty($result->results) AND $result->results > 1){
-            
+            //Faz um lista de cupons
             $hashList = array();
             foreach($result->results as $key=>$value){
                 foreach ($value as $key2 => $value2) {
@@ -147,11 +147,12 @@ date_default_timezone_set('America/Sao_Paulo');
                 }
             }
 
-            $raffled = array_rand($hashList, 2);
+            $raffled = array_rand($hashList, 2); // Embaralha os cupons
 
-            $resultWinner = $model->search_for_hash_owner($hashList[$raffled[0]]);
+            $resultWinner = $model->search_for_hash_owner($hashList[$raffled[0]]);// Procura pelo dono do cupom
 
-            $winnerName = $resultWinner->results[0]->name;
+            // Retorn o nome e o hash e salva na sessão
+            $winnerName = $resultWinner->results[0]->name; 
             $winnerNumber = $hashList[$raffled[0]];
             $_SESSION['winnerName'] = $winnerName;
             $_SESSION['winnerNumber'] = $winnerNumber;
@@ -169,21 +170,22 @@ date_default_timezone_set('America/Sao_Paulo');
         }
     }    
 
-    function announce_sweepstake_winner()
+    // Anuncia  vencedor do sorteio
+    function announce_sweepstake_winner():array
     {
         try {
 
             $model = new Sweepstakes();
 
             $model->delete_luck_numbers();
-            //SALVA NO LOG
+            // Salva no log
             logger("Todos números da sorte foram apagados. ", 'info');
 
-            //DESATIVA TODOS OS CUPONS
+            // Desativa todos os cupons
             $model->deactivate_all_coupons();
             logger("Todos os cupons foram desativados. ", 'info');
 
-            //MUDA O STATUS DO SORTEIO PARA ATIVO
+            // Muda o status do sorteio para ativo
             $model->activate_sweepstake();
             logger("Status do sorteio para realizado. ", 'info');
 
@@ -200,7 +202,8 @@ date_default_timezone_set('America/Sao_Paulo');
         }
     } 
 
-    function enable_sweepstake()
+    //Habilita o sistema para novo sorteio
+    function enable_sweepstake():array
     {
         try {
 
@@ -233,7 +236,7 @@ date_default_timezone_set('America/Sao_Paulo');
 //--------------------      HASHES       ----------------------
 //-----------------------------------------------------------------
 
-    // GERA O GUID
+    // Gera o guid
     function guidv4($data = null) 
     {
         // Generate 16 bytes (128 bits) of random data or use the data passed into the function.
@@ -254,6 +257,7 @@ date_default_timezone_set('America/Sao_Paulo');
 //-----------------------      VIEWS       -------------------------
 //-----------------------------------------------------------------
 
+// Tratativa para retorn das views - (TESTING)
 class TraitViews extends BaseController
 {
     function trait_views($viewName, $data)
@@ -265,8 +269,6 @@ class TraitViews extends BaseController
         $this->view('layouts/html_footer');
     }
 }
-
-    // TRATA O RETORNO DAS VIEWS
 
 //-----------------------------------------------------------------
 //-----------------------      DATA       -------------------------
@@ -288,7 +290,7 @@ class TraitViews extends BaseController
         
     }
 
-    // EXPORTA UM ARRAY
+    // Cria o arquivo CSV e inicia o download
     function export_csv($dataArray, $headersArray, $fileName)
     {
 
@@ -333,7 +335,7 @@ class TraitViews extends BaseController
 
     }
 
-    //
+    // Criação de arquivo OFX - (TESTING)
     function export_ofx($data)
     {
 
