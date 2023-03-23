@@ -7,8 +7,9 @@ use scMVC\Models\BaseModel;
 
 class Coupons extends BaseModel
 {
-    //
-    public function get_my_coupons($user_id){
+    //Retorn os cupons do usuario
+    public function get_my_coupons(int $user_id):array
+    {
             $params = [
                 ':user_id' => $user_id
             ];
@@ -31,8 +32,9 @@ class Coupons extends BaseModel
             ];
     }
 
-    //
-    public function get_active_coupons(){
+    //Retorna somentos os cupons ativos(Todos)
+    public function get_active_coupons():array
+    {
             $params = [];
             $this->db_connect();
             $results = $this->query(
@@ -53,8 +55,9 @@ class Coupons extends BaseModel
                 ];
     }
 
-    //
-    public function get_client_coupons($client_id){
+    //Retorna os cupons do cliente selecionado
+    public function get_client_coupons(int $client_id):array
+    {
             $params = [
                 ':client_id' => $client_id
             ];
@@ -75,17 +78,14 @@ class Coupons extends BaseModel
                 "ORDER BY status ASC",
                  $params);
 
-                /* printData($results); */
-          /*   SELECT n.hash, u.name FROM luck_numbers AS n INNER JOIN users AS u ON n.user_id=u.id WHERE n.hash='$hash' */
-
             return [
                 'status' => 'success',
                 'data' => $results->results
             ];
     }
 
-    //REGISTRA O CUPOM NA BASE DE DADOS
-    function insert_coupon_to_database($params)
+    //Registra o cupom no banco
+    function insert_coupon_to_database(array $params)
     {
         $formData = [
             ':code'      => $params['code'],
@@ -105,8 +105,8 @@ class Coupons extends BaseModel
     
     }
 
-    //CRIA OS NUMEROS DA SORTE
-    public function create_luck_numbers($guid, $id)
+    //Cria os numeros da sorte
+    public function create_luck_numbers(string $guid, int $id)
     {
     
         $params = [
@@ -128,8 +128,8 @@ class Coupons extends BaseModel
     
     }
 
-    //DESATIVA OS CUPONS QUE JA FORAM PROCESSADOS
-    public function deactive_coupons($id)
+    //Desativa os cupons que já foram processados
+    public function deactive_coupons(int $id)
     {
         $params = [
             ':user_id' => $id,
@@ -151,8 +151,8 @@ class Coupons extends BaseModel
 //----------------   QUERY VALIDATION      ------------------------
 //-----------------------------------------------------------------
 
-    //VERIFICA SE O CUPON JÁ EXISTE
-    function couponCodeValidation($code)
+    //Verifica se o cupom já existe
+    function couponCodeValidation(int $code)
     {
         $params = [
             ':code' => $code
@@ -162,7 +162,6 @@ class Coupons extends BaseModel
         $result = $this->query("SELECT * FROM coupons WHERE code = :code",
              $params);
 
-       /*  printData($result->affected_rows);   */  
         if($result->affected_rows > 0){
             return [
                 'status' => true,
@@ -175,8 +174,8 @@ class Coupons extends BaseModel
     }
 
 
-    //VERIFICA SE O CUPOM EXISTE E SE O CPF É O MESMO DO USUARIO LOGADO
-    function coupon_and_cpf_validation($values)
+    //Verifica se o cupom existe e se o cpf é o mesmo do usuario logado
+    function coupon_and_cpf_validation(array $values)
     {
         $codeParams = [':code' => $values['code']];
         $cpfParams =  [':user_id' => $values['user_id']];
@@ -213,22 +212,19 @@ class Coupons extends BaseModel
         }
     }
 
-    //
-    function get_user_valid_coupons($id)
+    // Retorna os cupons válidos do usuário
+    function get_user_valid_coupons(int $id)
     {
         $params = ['user_id' => $id,];
 
         $this->db_connect();
         $resultTotal = $this->query("SELECT SUM(valor) AS total FROM coupons WHERE user_id = :user_id and status = '1'", $params);
 
-        /* $totalResult = (float)$result[0]['total']; */
-
         return $resultTotal;
 
     }
 
-
-    /*  
+/*  
     public function delete_agent_client($id_client){
         
         $params = [
@@ -243,6 +239,7 @@ class Coupons extends BaseModel
             ];
             $this->db_connect();
             return $this->query("SELECT * FROM agents WHERE profile =:profile", $params);
-    } */
+    } 
+*/
 
 }
