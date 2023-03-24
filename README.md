@@ -17,6 +17,24 @@ Senha: 12345
 
 ```
 
-> As contas criadas por usuários externos têm acesso somente ao cadastro de cupons > e aos próprios cupons cadastrados.
+## Cliente:
+
+Acesso a administração:
+
+```
+Login: 22222222222
+
+Senha: 12345
+
+```
+
+> As contas criadas por usuários externos têm acesso somente ao cadastro de cupons e aos próprios cupons cadastrados.
 
 > Você pode acessar o site de teste pelo link:
+
+## Algumas Telas:
+
+![Sweepstakes Page](https://github.com/noziXsHooter/rbm-campaign-shopping-v2/blob/main/public/assets/images/sweepstakes.jpg)
+
+![Home Page](https://github.com/noziXsHooter/rbm-campaign-shopping-v2/blob/main/public/assets/images/adm-home.jpg)
+
