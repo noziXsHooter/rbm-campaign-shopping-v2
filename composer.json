@@ -18,8 +18,7 @@
         },
         "files":[
             "app/config.php",
-            "app/helpers/functions.php",
-            "app/system/RouterTest.php"
+            "app/helpers/functions.php"
         ]
     }
 }

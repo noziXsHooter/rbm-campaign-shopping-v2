@@ -7,9 +7,8 @@ namespace Composer\Autoload;
 class ComposerStaticInit080e2ccbecac0b0a0d365cb20495c659
 {
     public static $files = array (
-        'd7cfae2bf457008a61fda2626a2df19e' => __DIR__ . '/../..' . '/app/config.php',
-        'fe64a0622628bda04e4bdb38bda05577' => __DIR__ . '/../..' . '/app/helpers/functions.php',
-        '6c9da7c7f1e47b5ac1850fa4dea807bc' => __DIR__ . '/../..' . '/app/system/RouterTest.php',
+        '0070e6e209fefbcfb70495a0f3fd2b68' => __DIR__ . '/../..' . '/app/config.php',
+        '7c89ee65b8b128733a8fa024d9f62f27' => __DIR__ . '/../..' . '/app/helpers/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -193,7 +192,6 @@ class ComposerStaticInit080e2ccbecac0b0a0d365cb20495c659
         'scMVC\\Models\\Users' => __DIR__ . '/../..' . '/app/models/Users.php',
         'scMVC\\System\\Database' => __DIR__ . '/../..' . '/app/system/Database.php',
         'scMVC\\System\\Router' => __DIR__ . '/../..' . '/app/system/Router.php',
-        'scMVC\\System\\RouterTest' => __DIR__ . '/../..' . '/app/system/RouterTest.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

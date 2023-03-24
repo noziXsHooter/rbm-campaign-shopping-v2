@@ -146,5 +146,4 @@ return array(
     'scMVC\\Models\\Users' => $baseDir . '/app/models/Users.php',
     'scMVC\\System\\Database' => $baseDir . '/app/system/Database.php',
     'scMVC\\System\\Router' => $baseDir . '/app/system/Router.php',
-    'scMVC\\System\\RouterTest' => $baseDir . '/app/system/RouterTest.php',
 );
