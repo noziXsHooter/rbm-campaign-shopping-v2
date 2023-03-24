@@ -7,8 +7,9 @@ use scMVC\Models\BaseModel;
 
 class Sweepstakes extends BaseModel
 {
-
-    public function get_sweepstakes(){
+    // Retorna todos os sorteio já realizados
+    public function get_sweepstakes()
+    {
             $params = [];
             
             $this->db_connect();
@@ -20,8 +21,9 @@ class Sweepstakes extends BaseModel
             ];
     }
 
-    //
-    public function sweepstake_status(){
+    // Retorna o status do sorteio
+    public function sweepstake_status()
+    {
 
             $params = [];
             $this->db_connect();
@@ -35,8 +37,9 @@ class Sweepstakes extends BaseModel
                 ];
     }
 
-    //
-    public function get_all_hashs(){
+    // Retorna todos os números da sorte
+    public function get_all_hashs()
+    {
             $params = [];
 
             $this->db_connect();
@@ -44,11 +47,12 @@ class Sweepstakes extends BaseModel
                 "SELECT hash FROM luck_numbers",
                  $params);
 
-                return $results;
+            return $results;
     }
 
-    //
-    public function get_client_coupons($client_id){
+    //Retorna todos os cupons do cliente selecionado
+    public function get_client_coupons(int $client_id)
+    {
             $params = [
                 ':client_id' => $client_id
             ];
@@ -69,17 +73,14 @@ class Sweepstakes extends BaseModel
                 "ORDER BY status ASC",
                  $params);
 
-                /* printData($results); */
-          /*   SELECT n.hash, u.name FROM luck_numbers AS n INNER JOIN users AS u ON n.user_id=u.id WHERE n.hash='$hash' */
-
             return [
                 'status' => 'success',
                 'data' => $results->results
             ];
     }
 
-    //PROCURA PELO NOME DO GANHADOR DO SORTEIO PELO HASH SORTEADO
-    public function search_for_hash_owner($hash)
+    // Retorna o nome do ganhador pelo hash sorteado
+    public function search_for_hash_owner(string $hash)
     {
         $params = [':hash' => $hash];
 
@@ -107,7 +108,7 @@ class Sweepstakes extends BaseModel
         }
     }
 
-    //
+    // Exclui todos os números da sorte
     function delete_luck_numbers()
     {
         $params = [];
@@ -117,7 +118,7 @@ class Sweepstakes extends BaseModel
 
     }
     
-    //
+    // Desativa status do sorteio
     function deactivate_sweepstake()
     {
         $params = [];
@@ -127,7 +128,7 @@ class Sweepstakes extends BaseModel
 
     }
 
-    //
+    // Ativa status do sorteio
     function activate_sweepstake()
     {
         $params = [];
@@ -137,7 +138,7 @@ class Sweepstakes extends BaseModel
 
     }
 
-    //REGISTRA O SORTEIO NO BANCO DE DADOS
+    // Registra o sorteio no banco
     function insert_sweepstake_to_database($params)
     {
         
@@ -150,13 +151,14 @@ class Sweepstakes extends BaseModel
         $this->db_connect();
         $result = $this->non_query("INSERT INTO sweepstakes (user_id, hash, name) 
         VALUES (:user_id, :hash, :name)", $formData);
-        //SALVA NO LOG
+
+        // Ssalva no log
         logger("Sorteio registrado na base de dados. ", 'info');
         return $result->status;
 
     }
 
-    //DESATIVA TODOS O STATUS DE TODOS OS CUPONS (CHAMADO APÓS ANUNCIAR O VENCEDOR DO SORTEIO)
+    //Desativa todos os status de todos os cupons - (É chamado após anunciar o vencedor do sorteio)
     public function deactivate_all_coupons()
     {
         $params = [];
@@ -173,7 +175,7 @@ class Sweepstakes extends BaseModel
         }
     }   
 
-   //APAGA TODOS OS COUPONS CRIADOS
+   // Apaga todos os cupons criados
    public function clean_all_coupons()
    {
        $params = [];
@@ -203,7 +205,8 @@ class Sweepstakes extends BaseModel
                 , $params);
                 
                 return $results;
-    } */
+    } 
+*/
     
 
 }
