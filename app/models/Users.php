@@ -7,6 +7,7 @@ use scMVC\Models\BaseModel;
 
 class Users extends BaseModel
 {
+    // Checa o login
     public function check_login($cpf, $password)
     {
         $params = [
@@ -17,7 +18,8 @@ class Users extends BaseModel
 /*         $results = $this->query(
             "SELECT id, passwrd FROM users " .
             "WHERE AES_ENCRYPT(:username, '" . MYSQL_AES_KEY."') = name"
-            , $params); */
+            , $params); 
+*/
 
         $results = $this->query(
                     "SELECT cpf, password FROM users WHERE :cpf = cpf"
@@ -29,7 +31,7 @@ class Users extends BaseModel
                     'status' => false
                 ];
             }
-
+        // Verifica o password encripitado com o digitado no campo
         if(!password_verify($password, $results->results[0]->password)){
             return [
              'status' => false
@@ -40,8 +42,8 @@ class Users extends BaseModel
         ];
     }
 
-    //
-    public function check_register($cpf)
+    // Verifica se o cpf já está registrado no banco
+    public function check_register(string $cpf):array
     {
         $params = [
             ':cpf' => $cpf
@@ -63,8 +65,9 @@ class Users extends BaseModel
             'status' => true
         ];
     }
-    //
-    public function user_register($params)
+
+    //Registra o usuário
+    public function user_register(array $params)
     {
         $params = [
             ':name' => $params['name'],
@@ -88,13 +91,15 @@ class Users extends BaseModel
                    ];
                 }
 
-                    return [
-                        'status' => true,
-                        'message' => 'Registrado com sucesso!'
-                   ];
-        }
+                return [
+                    'status' => true,
+                    'message' => 'Registrado com sucesso!'
+                ];
+    }
 
-    public function get_all_clients(){
+    //Retorna todos os clientes
+    public function get_all_clients()
+    {
 
         $params = [];
 
@@ -114,8 +119,9 @@ class Users extends BaseModel
             ];
     }
 
-
-    public function get_user_data($cpf){
+    // Retorna os dados do cliente
+    public function get_user_data(string $cpf)
+    {
         $params = [
             ':cpf' => $cpf
         ];
@@ -135,11 +141,12 @@ class Users extends BaseModel
             ];
         }
         
-        public function set_user_last_login($id){
+/*
+    public function set_user_last_login($id){
             
-            $params = [
+        $params = [
                 'id' => $id
-            ];
+        ];
         $this->db_connect();
         $results = $this->non_query(
             "UPDATE agents SET " . 
@@ -147,96 +154,9 @@ class Users extends BaseModel
             "WHERE id = :id"
             , $params);
             
-            return $results;
-        }
-        
-        public function get_clients(){
-            
-            $params = [
-
-            ];
-            
-            $this->db_connect();
-            $results = $this->query(
-                "SELECT " .
-                "id, " .
-                "name, " .
-                "cpf, " .
-                "sex, " .
-                "born_in, " .
-                "FROM users " .
-                "WHERE id_agent = :id_agent " .
-                "AND deleted_at IS NULL",
-                    $params
-                );
-
-            return [
-                'status' => 'success',
-                'data' => $results->results
-            ];
-        }
-        
-        public function add_new_client_to_database($post_data){
-
-            $birthdate = new \DateTime($post_data['text_birthdate']);
-            $params = [
-                ':name'=> $post_data['text_name'],
-                ':gender'=> $post_data['radio_gender'],
-                ':birthdate'=> $birthdate->format('Y-m-d H:i:s'),
-                ':email'=> $post_data['text_email'],
-                ':phone'=> $post_data['text_phone'],
-                ':interests'=> $post_data['text_interests'],
-                ':id_agent'=> $_SESSION['user']->id
-            ];
-            
-            $this->db_connect();
-            $result = $this->non_query(
-                "INSERT INTO persons VALUES(" .
-                "0, " .
-                "AES_ENCRYPT(:name, '" . MYSQL_AES_KEY . "'), " .
-                ":gender, " .
-                ":birthdate, " .
-                "AES_ENCRYPT(:email, '" . MYSQL_AES_KEY . "'), " .
-                "AES_ENCRYPT(:phone, '" . MYSQL_AES_KEY . "'), " .
-                ":interests, " .
-                ":id_agent,  " .
-                "NOW(), " .
-                "NOW(), " .
-                "NULL" .
-                ")", 
-                $params);
+        return $results;
     }
-
-    public function get_client_data($id_client){
-        $params = [
-            ':id_client' => $id_client
-        ];
-        $this->db_connect();
-        $results = $this->query(
-            "SELECT " .
-            "id, " .
-            "AES_DECRYPT(name, '" . MYSQL_AES_KEY . "') name, " .
-            "gender, " .
-            "birthdate, " .
-            "AES_DECRYPT(email, '" . MYSQL_AES_KEY . "') email, " .
-            "AES_DECRYPT(phone, '" . MYSQL_AES_KEY . "') phone, " .
-            "interests " .
-            "FROM persons " .
-            "WHERE id = :id_client"
-            , $params);
-            
-            if($results->affected_rows == 0){
-                return [
-                    'status' => 'error'
-                ];
-            }
-
-            return [
-                'status' => 'success',
-                'data' => $results->results[0]
-            ];
-    }
-    
+ 
     public function delete_agent_client($id_client){
         
         $params = [
@@ -245,6 +165,8 @@ class Users extends BaseModel
         $this->db_connect();
         return $this->non_query("DELETE FROM persons WHERE id = :id", $params);
     } 
+
+ */   
     /*     public function get_results(){
             $params = [
                 'profile' => 'admin'
