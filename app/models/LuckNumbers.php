@@ -7,8 +7,9 @@ use scMVC\Models\BaseModel;
 
 class LuckNumbers extends BaseModel
 {
-
-    public function get_luck_numbers(){
+    //Retorna os números da sorte
+    public function get_luck_numbers()
+    {
             $params = [];
             
             $this->db_connect();
@@ -31,8 +32,9 @@ class LuckNumbers extends BaseModel
             ];
     }
 
-    //
-    public function get_client_luck_numbers($user_id){
+    //Retorna os números da sorte do cliente
+    public function get_client_luck_numbers($user_id)
+    {
 
             $params = [
                 ':user_id' => $user_id
@@ -52,7 +54,6 @@ class LuckNumbers extends BaseModel
             "WHERE u.id = :user_id " .
             "ORDER BY u.name ASC ",
              $params);
-           /*   $result = $this->query("SELECT luck_numbers.*, users.name, users.sex, users.name FROM luck_numbers INNER JOIN users ON luck_numbers.user_id = 2 WHERE users.id = luck_numbers.user_id"); */
 
                 return [
                     'status' => 'success',
