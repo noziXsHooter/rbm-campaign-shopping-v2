@@ -70,3 +70,5 @@
 [2023-03-23T22:58:55.103523-03:00] app_logs.INFO: Todos os cupons foram desativados.  [] []
 [2023-03-23T22:58:55.107195-03:00] app_logs.INFO: Status do sorteio para realizado.  [] []
 [2023-03-23T22:59:06.220932-03:00] app_logs.NOTICE: Houve uma tentativa de sorteio sem números da sorte.  [] []
+[2023-03-24T00:21:12.062940-03:00] app_logs.INFO: John Doe- fez logout [] []
+[2023-03-24T09:51:31.205271-03:00] app_logs.INFO: 11111111111 - logou com successo [] []
