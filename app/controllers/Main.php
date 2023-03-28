@@ -49,7 +49,7 @@ class Main extends BaseController
         $password = $_POST['text_password'];
 
         //Implementação
-       /*  if(!filter_var($cpf, FILTER_VALIDATE_EMAIL)){
+/*      if(!filter_var($cpf, FILTER_VALIDATE_EMAIL)){
             $validation_errors[] = "O usuário tem que ser um email válido";
         }
 
@@ -59,8 +59,8 @@ class Main extends BaseController
         if(strlen($password) < 6 || strlen($password) > 12){
             var_dump(strlen($password));
             $validation_errors[] = "O senha deve ter entre 6 e 12 caracteres";
-        } 
-        */
+        }
+*/
 
         if(!empty($validation_errors)){
             $_SESSION['validation_errors'] = $validation_errors;
@@ -73,9 +73,10 @@ class Main extends BaseController
 
         if(!$result['status']){
            
-
             logger("$cpf - login inválido", 'error');
 
+            $validation_errors[] = "Login inválido";
+            $_SESSION['validation_errors'] = $validation_errors;
             $_SESSION['server_error'] = 'Login inválido';
             $this->login_frm();
             return;

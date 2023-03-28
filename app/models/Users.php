@@ -28,13 +28,15 @@ class Users extends BaseModel
 
         if($results->affected_rows == 0){
              return [
-                    'status' => false
+                    'status' => false,
+                    
                 ];
             }
         // Verifica o password encripitado com o digitado no campo
         if(!password_verify($password, $results->results[0]->password)){
             return [
              'status' => false
+
             ];
         }
         return [
